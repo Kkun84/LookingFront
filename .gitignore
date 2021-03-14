@@ -1,0 +1,8 @@
+.pytest_cache/
+.ipynb_checkpoints/
+__pycache__/
+.ipynb_checkpoints/
+/nohup.out
+.DS_Store
+
+data/**/*.png

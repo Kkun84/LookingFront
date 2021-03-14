@@ -9,6 +9,7 @@ from pathlib import Path
 class DataModule(pl.LightningDataModule):
     def __init__(
         self,
+        image_size: int,
         data_path: Union[str, Path] = 'data/raw',
         batch_size: int = 64,
         num_workers: int = 24,
@@ -21,7 +22,7 @@ class DataModule(pl.LightningDataModule):
         self.transform = transforms.Compose(
             [
                 transforms.CenterCrop(720),
-                transforms.Resize(64),
+                transforms.Resize(image_size),
                 transforms.ToTensor(),
             ]
         )

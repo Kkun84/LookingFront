@@ -1,0 +1,21 @@
+{
+    "python.pythonPath": "/opt/conda/bin/python",
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#c899e1",
+        "activityBar.activeBorder": "#f8f2e6",
+        "activityBar.background": "#c899e1",
+        "activityBar.foreground": "#15202b",
+        "activityBar.inactiveForeground": "#15202b99",
+        "activityBarBadge.background": "#f8f2e6",
+        "activityBarBadge.foreground": "#15202b",
+        "statusBar.background": "#b372d5",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#9e4bc9",
+        "titleBar.activeBackground": "#b372d5",
+        "titleBar.activeForeground": "#15202b",
+        "titleBar.inactiveBackground": "#b372d599",
+        "titleBar.inactiveForeground": "#15202b99"
+    },
+    "peacock.remoteColor": "#b372d5",
+    "peacock.color": "#b372d5"
+}

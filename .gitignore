@@ -4,3 +4,6 @@ __pycache__/
 .ipynb_checkpoints/
 /nohup.out
 .DS_Store
+
+/data/raw/
+/lightning_logs/

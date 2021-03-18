@@ -11,6 +11,7 @@ class Discriminator(nn.Module):
         self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
         self.conv4 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
         self.conv5 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
+        self.conv6 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
 
         self.pool = nn.MaxPool2d(2)
 
@@ -31,6 +32,8 @@ class Discriminator(nn.Module):
         x = self.conv4(x)
         x = self.pool(x)
         x = self.conv5(x)
+        x = self.pool(x)
+        x = self.conv6(x)
 
         x = self.gap(x.relu())
         x = self.flatten(x)
@@ -48,6 +51,6 @@ if __name__ == '__main__':
 
     batch_size = 2
     channel = 3
-    width, height = 256, 32
+    width, height = 128, 128
 
     summary(model, input_size=(batch_size, channel, height, width))

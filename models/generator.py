@@ -28,6 +28,6 @@ if __name__ == '__main__':
 
     batch_size = 2
     channel = 3
-    width, height = 256, 32
+    width, height = 128, 128
 
     summary(model, input_size=(batch_size, channel, height, width))

@@ -21,9 +21,9 @@ def main():
 
     print(args)
 
-    max_epochs = args['--max_epochs']
-    batch_size = args['--batch_size']
-    image_size = args['--image_size']
+    max_epochs = int(args['--max_epochs'])
+    batch_size = int(args['--batch_size'])
+    image_size = int(args['--image_size'])
 
     datamodule = DataModule(batch_size=batch_size, image_size=image_size)
     model = GAN()

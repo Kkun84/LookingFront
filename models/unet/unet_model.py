@@ -13,18 +13,27 @@ class UNet(nn.Module):
         self.bilinear = bilinear
 
         factor = 2 if bilinear else 1
-        self.inc = DoubleConv(n_channels, 2 ** 5)
-        self.down1 = Down(2 ** 5, 2 ** 6)
-        self.down2 = Down(2 ** 6, 2 ** 7)
-        self.down3 = Down(2 ** 7, 2 ** 8)
-        self.down4 = Down(2 ** 8, 2 ** 9)
-        self.down5 = Down(2 ** 9, 2 ** 10 // factor)
-        self.up1 = Up(2 ** 10, 2 ** 9 // factor, bilinear)
-        self.up2 = Up(2 ** 9, 2 ** 8 // factor, bilinear)
-        self.up3 = Up(2 ** 8, 2 ** 7 // factor, bilinear)
-        self.up4 = Up(2 ** 7, 2 ** 6 // factor, bilinear)
-        self.up5 = Up(2 ** 6, 2 ** 5, bilinear)
-        self.outc = OutConv(2 ** 5, n_classes)
+        start_chanels = 2 ** 5
+        self.inc = DoubleConv(n_channels, start_chanels)
+        self.down1 = Down(start_chanels, start_chanels * 2 ** 1)
+        self.down2 = Down(start_chanels * 2 ** 1, start_chanels * 2 ** 2)
+        self.down3 = Down(start_chanels * 2 ** 2, start_chanels * 2 ** 3)
+        self.down4 = Down(start_chanels * 2 ** 3, start_chanels * 2 ** 4)
+        self.down5 = Down(start_chanels * 2 ** 4, start_chanels * 2 ** 5 // factor)
+        self.up1 = Up(
+            start_chanels * 2 ** 5, start_chanels * 2 ** 4 // factor, bilinear
+        )
+        self.up2 = Up(
+            start_chanels * 2 ** 4, start_chanels * 2 ** 3 // factor, bilinear
+        )
+        self.up3 = Up(
+            start_chanels * 2 ** 3, start_chanels * 2 ** 2 // factor, bilinear
+        )
+        self.up4 = Up(
+            start_chanels * 2 ** 2, start_chanels * 2 ** 1 // factor, bilinear
+        )
+        self.up5 = Up(start_chanels * 2 ** 1, start_chanels, bilinear)
+        self.outc = OutConv(start_chanels, n_classes)
 
     def forward(self, x):
         x1 = self.inc(x)

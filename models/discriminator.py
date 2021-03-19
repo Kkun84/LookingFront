@@ -6,19 +6,52 @@ class Discriminator(nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
-        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
-        self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
-        self.conv4 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
-        self.conv5 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
-        self.conv6 = nn.Conv2d(64, 64, kernel_size=3, stride=1, padding=1)
+        start_chanels = 2 ** 5
+        self.conv1 = nn.Conv2d(
+            3, start_chanels * 2 ** 0, kernel_size=3, stride=1, padding=1
+        )
+        self.conv2 = nn.Conv2d(
+            start_chanels * 2 ** 0,
+            start_chanels * 2 ** 1,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+        )
+        self.conv3 = nn.Conv2d(
+            start_chanels * 2 ** 1,
+            start_chanels * 2 ** 2,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+        )
+        self.conv4 = nn.Conv2d(
+            start_chanels * 2 ** 2,
+            start_chanels * 2 ** 3,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+        )
+        self.conv5 = nn.Conv2d(
+            start_chanels * 2 ** 3,
+            start_chanels * 2 ** 4,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+        )
+        self.conv6 = nn.Conv2d(
+            start_chanels * 2 ** 4,
+            start_chanels * 2 ** 5,
+            kernel_size=3,
+            stride=1,
+            padding=1,
+        )
 
         self.pool = nn.MaxPool2d(2)
 
         self.gap = nn.AdaptiveAvgPool2d(1)
         self.flatten = nn.Flatten()
 
-        self.linear = nn.Linear(64, 1)
+        self.linear = nn.Linear(start_chanels * 2 ** 5, 1)
 
         self.sigmoid = nn.Sigmoid()
 

@@ -13,7 +13,7 @@ class UNet(nn.Module):
         self.bilinear = bilinear
 
         factor = 2 if bilinear else 1
-        start_chanels = 2 ** 5
+        start_chanels = 2 ** 4
         self.inc = DoubleConv(n_channels, start_chanels)
         self.down1 = Down(start_chanels, start_chanels * 2 ** 1)
         self.down2 = Down(start_chanels * 2 ** 1, start_chanels * 2 ** 2)

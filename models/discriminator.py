@@ -6,7 +6,7 @@ class Discriminator(nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        start_chanels = 2 ** 5
+        start_chanels = 2 ** 6
         self.conv1 = nn.Conv2d(
             3, start_chanels * 2 ** 0, kernel_size=3, stride=1, padding=1
         )
@@ -31,27 +31,13 @@ class Discriminator(nn.Module):
             stride=1,
             padding=1,
         )
-        self.conv5 = nn.Conv2d(
-            start_chanels * 2 ** 3,
-            start_chanels * 2 ** 4,
-            kernel_size=3,
-            stride=1,
-            padding=1,
-        )
-        self.conv6 = nn.Conv2d(
-            start_chanels * 2 ** 4,
-            start_chanels * 2 ** 5,
-            kernel_size=3,
-            stride=1,
-            padding=1,
-        )
 
         self.pool = nn.MaxPool2d(2)
 
-        self.gap = nn.AdaptiveAvgPool2d(1)
+        # self.gap = nn.AdaptiveAvgPool2d(1)
         self.flatten = nn.Flatten()
 
-        self.linear = nn.Linear(start_chanels * 2 ** 5, 1)
+        self.linear = nn.Linear(start_chanels * (2 ** 3) * (8 ** 2), 1)
 
         self.sigmoid = nn.Sigmoid()
 
@@ -64,11 +50,8 @@ class Discriminator(nn.Module):
         x = self.pool(x)
         x = self.conv4(x)
         x = self.pool(x)
-        x = self.conv5(x)
-        x = self.pool(x)
-        x = self.conv6(x)
 
-        x = self.gap(x.relu())
+        # x = self.gap(x.relu())
         x = self.flatten(x)
 
         x = self.linear(x)

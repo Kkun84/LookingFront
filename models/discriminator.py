@@ -1,46 +1,32 @@
 import torch
-from torch import nn
+from torch import Tensor, nn
 
 
 class Discriminator(nn.Module):
     def __init__(self) -> None:
         super().__init__()
 
-        start_chanels = 2 ** 8
+        start_chanels = 2 ** 6
         self.conv1 = nn.Conv2d(
-            3 + 0, start_chanels * (2 ** 0), kernel_size=3, stride=1, padding=1
+            3 + 2, start_chanels * (2 ** 0), kernel_size=3, stride=1, padding=1
         )
         self.conv2 = nn.Conv2d(
             start_chanels * (2 ** 0),
-            start_chanels * (2 ** 0),
+            start_chanels * (2 ** 1),
             kernel_size=3,
             stride=1,
             padding=1,
         )
         self.conv3 = nn.Conv2d(
-            start_chanels * (2 ** 0),
-            start_chanels * (2 ** 0),
+            start_chanels * (2 ** 1),
+            start_chanels * (2 ** 2),
             kernel_size=3,
             stride=1,
             padding=1,
         )
         self.conv4 = nn.Conv2d(
-            start_chanels * (2 ** 0),
-            start_chanels * (2 ** 0),
-            kernel_size=3,
-            stride=1,
-            padding=1,
-        )
-        self.conv5 = nn.Conv2d(
-            start_chanels * (2 ** 0),
-            start_chanels * (2 ** 0),
-            kernel_size=3,
-            stride=1,
-            padding=1,
-        )
-        self.conv6 = nn.Conv2d(
-            start_chanels * (2 ** 0),
-            start_chanels * (2 ** 0),
+            start_chanels * (2 ** 2),
+            start_chanels * (2 ** 3),
             kernel_size=3,
             stride=1,
             padding=1,
@@ -51,26 +37,22 @@ class Discriminator(nn.Module):
         self.gap = nn.AdaptiveAvgPool2d(1)
         self.flatten = nn.Flatten()
 
-        self.linear = nn.Linear(start_chanels * (2 ** 0), 1)
+        self.linear = nn.Linear(start_chanels * (2 ** 3), 1)
 
         self.sigmoid = nn.Sigmoid()
 
-    def forward(self, x):
-        # x = torch.cat(
-        #     [
-        #         x,
-        #         torch.stack(
-        #             torch.meshgrid(
-        #                 torch.linspace(-1, 1, x.shape[2], device=x.device),
-        #                 torch.linspace(-1, 1, x.shape[3], device=x.device),
-        #             )
-        #         )
-        #         .unsqueeze(0)
-        #         .expand(len(x), -1, -1, -1),
-        #     ],
-        #     1,
-        # )
+    @staticmethod
+    def cat_coord(x: Tensor) -> Tensor:
+        assert x.ndim == 4
+        grid = torch.meshgrid(
+            *[torch.linspace(-1, 1, s, device=x.device) for s in x.shape[2:4]]
+        )
+        coord = torch.stack(grid).unsqueeze(0).expand(len(x), -1, -1, -1)
+        x = torch.cat([x, coord], 1)
+        return x
 
+    def forward(self, x: Tensor) -> Tensor:
+        x = self.cat_coord(x)
         x = self.conv1(x)
         x = self.pool(x)
         x = self.conv2(x)
@@ -78,10 +60,6 @@ class Discriminator(nn.Module):
         x = self.conv3(x)
         x = self.pool(x)
         x = self.conv4(x)
-        x = self.pool(x)
-        x = self.conv5(x)
-        x = self.pool(x)
-        x = self.conv6(x)
 
         x = self.gap(x.relu())
         x = self.flatten(x)

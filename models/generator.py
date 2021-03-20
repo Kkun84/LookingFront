@@ -1,4 +1,5 @@
-from torch import nn
+from torch import Tensor, nn
+
 from models.unet import UNet
 
 
@@ -12,7 +13,7 @@ class Generator(nn.Module):
         # self.conv2 = nn.Conv2d(64, 64, 3, 1, 1)
         # self.conv3 = nn.Conv2d(64, 3, 3, 1, 1)
 
-    def forward(self, x):
+    def forward(self, x: Tensor) -> Tensor:
         x = self.net(x)
         x = self.sigmoid(x)
         # x = self.conv1(x).relu()

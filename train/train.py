@@ -1,12 +1,13 @@
 """
 Usage:
-  train.py [--max_epochs=<int>] [--batch_size=<int>] [--image_size=<int>]
+    train.py [--max_epochs=<int>] [--batch_size=<int>] [--image_size=<int>] [--lr=<float>]
 
 Options:
-  -h --help           Show this screen.
-  --max_epochs=<int>  Epoch num [default: 300].
-  --batch_size=<int>  Batch size [default: 16].
-  --image_size=<int>  Image width & height [default: 128].
+    -h --help           Show this screen.
+    --max_epochs=<int>  Epoch num [default: 300].
+    --batch_size=<int>  Batch size [default: 16].
+    --image_size=<int>  Image width & height [default: 128].
+    --lr=<float>        Learning rate.
 """
 
 from docopt import docopt
@@ -25,8 +26,10 @@ def main():
     batch_size = int(args['--batch_size'])
     image_size = int(args['--image_size'])
 
+    lr = args['--lr'] and float(args['--lr'])
+
     datamodule = DataModule(batch_size=batch_size, image_size=image_size)
-    model = GAN()
+    model = GAN(**{k: v for k, v in dict(lr=lr).items() if v is not None})
 
     trainer = pl.Trainer(
         gpus=1,

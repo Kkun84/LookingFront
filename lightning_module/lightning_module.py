@@ -11,9 +11,7 @@ from models import Generator, Discriminator
 class GAN(pl.LightningModule):
     def __init__(
         self,
-        lr: float = 0.0002,
-        b1: float = 0.5,
-        b2: float = 0.999,
+        lr: float = 0.001,
     ):
         super().__init__()
         self.save_hyperparameters()
@@ -24,11 +22,9 @@ class GAN(pl.LightningModule):
 
     def configure_optimizers(self):
         lr = self.hparams.lr
-        b1 = self.hparams.b1
-        b2 = self.hparams.b2
 
-        opt_g = torch.optim.Adam(self.generator.parameters(), lr=lr, betas=(b1, b2))
-        opt_d = torch.optim.Adam(self.discriminator.parameters(), lr=lr, betas=(b1, b2))
+        opt_g = torch.optim.Adam(self.generator.parameters(), lr=lr)
+        opt_d = torch.optim.Adam(self.discriminator.parameters(), lr=lr)
         return [opt_g, opt_d], []
 
     def forward(self, image_batch: Tensor):

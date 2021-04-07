@@ -1,4 +1,5 @@
-FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-runtime
+FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-runtime
+# FROM pytorch/pytorch:1.8.0-cuda11.1-cudnn8-runtime
 # FROM pytorch/pytorch:1.7.0-cuda11.0-cudnn8-runtime
 # FROM pytorch/pytorch:1.6.0-cuda10.1-cudnn7-runtime
 

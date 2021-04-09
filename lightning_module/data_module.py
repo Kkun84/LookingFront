@@ -32,8 +32,8 @@ class DataModule(pl.LightningDataModule):
 
     def setup(self, stage=None):
         self.train = ImageFolder(str(self.data_path / ''), transform=self.transform)
-        self.valid = ImageFolder(str(self.data_path / ''), transform=self.transform)
-        self.test = ImageFolder(str(self.data_path / ''), transform=self.transform)
+        # self.valid = ImageFolder(str(self.data_path / ''), transform=self.transform)
+        # self.test = ImageFolder(str(self.data_path / ''), transform=self.transform)
 
     def train_dataloader(self):
         return DataLoader(
@@ -43,18 +43,18 @@ class DataModule(pl.LightningDataModule):
             shuffle=True,
         )
 
-    def val_dataloader(self):
-        return DataLoader(
-            self.valid,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=False,
-        )
+    # def val_dataloader(self):
+    #     return DataLoader(
+    #         self.valid,
+    #         batch_size=self.batch_size,
+    #         num_workers=self.num_workers,
+    #         shuffle=False,
+    #     )
 
-    def test_dataloader(self):
-        return DataLoader(
-            self.test,
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=False,
-        )
+    # def test_dataloader(self):
+    #     return DataLoader(
+    #         self.test,
+    #         batch_size=self.batch_size,
+    #         num_workers=self.num_workers,
+    #         shuffle=False,
+    #     )

@@ -67,14 +67,16 @@ class GAN(pl.LightningModule):
             g_loss = self.adversarial_loss(
                 self.discriminator(self.generated_image_batch), valid
             )
-            tqdm_dict = {'g_loss': g_loss}
-            output = {'loss': g_loss, 'progress_bar': tqdm_dict, 'log': tqdm_dict}
+            self.log('g_loss', g_loss, prog_bar=True)
+            # tqdm_dict = {'g_loss': g_loss}
+            # output = {'loss': g_loss, 'log': tqdm_dict}
+            output = g_loss
         # train discriminator
         elif optimizer_idx == 1:
             # Measure discriminator's ability to classify real from generated samples
 
             # how well can it label as real?
-            mask = label == self.train_dataloader().dataset.class_to_idx['front']
+            mask = label == self.train_dataloader().dataset.class_to_idx['0_front']
             valid = torch.ones(
                 batchsize, 1, device=image_batch.device, dtype=torch.float32
             )
@@ -91,8 +93,8 @@ class GAN(pl.LightningModule):
 
             # discriminator loss is the average of these
             d_loss = (real_loss + fake_loss) / 2
-            tqdm_dict = {'d_loss': d_loss}
-            output = {'loss': d_loss, 'progress_bar': tqdm_dict, 'log': tqdm_dict}
+            self.log('d_loss', d_loss, prog_bar=True)
+            output = d_loss
         else:
             assert False
         return output

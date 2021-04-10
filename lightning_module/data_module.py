@@ -12,7 +12,7 @@ class DataModule(pl.LightningDataModule):
         image_size: int,
         data_path: Union[str, Path] = 'data/raw',
         batch_size: int = 64,
-        num_workers: int = 24,
+        num_workers: int = 8,
     ):
         super().__init__()
         self.data_path = data_path if isinstance(data_path, Path) else Path(data_path)

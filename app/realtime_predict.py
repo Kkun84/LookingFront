@@ -29,7 +29,6 @@ def predict(input: np.ndarray, model, transform) -> np.ndarray:
         assert len(x) == 1
         x = transforms.functional.to_pil_image(x[0]).resize([min(input.shape[0:2])] * 2)
         x = np.asarray(x)
-        # x = x.detach().cpu().clone().numpy()[0].transpose(1, 2, 0)
     return x
 
 

@@ -11,6 +11,7 @@ Options:
 from pathlib import Path
 
 import cv2
+from docopt import docopt
 import numpy as np
 import torch
 from PIL import Image

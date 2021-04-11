@@ -57,8 +57,8 @@ def main():
 
         while True:
             ret, frame = capture.read()
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             assert ret
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             cv2.imshow('Input', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
             x = frame.copy()
@@ -78,6 +78,7 @@ def main():
     finally:
         capture.release()
         cv2.destroyAllWindows()
+        print('Done.')
     return
 
 

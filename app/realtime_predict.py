@@ -53,6 +53,8 @@ def main():
     try:
         cv2.namedWindow('Input', cv2.WINDOW_NORMAL)
         cv2.namedWindow('Output', cv2.WINDOW_NORMAL)
+        cv2.namedWindow('Tile', cv2.WINDOW_NORMAL)
+        cv2.namedWindow('Compare', cv2.WINDOW_NORMAL)
 
         while True:
             ret, frame = capture.read()
@@ -66,6 +68,10 @@ def main():
             )
             cv2.imshow('Output', cv2.cvtColor(x, cv2.COLOR_RGB2BGR))
 
+            cv2.imshow('Tile', cv2.cvtColor(cv2.vconcat([frame, x]), cv2.COLOR_RGB2BGR))
+            cv2.imshow(
+                'Compare', cv2.cvtColor((frame // 2 + x // 2), cv2.COLOR_RGB2BGR)
+            )
 
             cv2.waitKey(1)
     except KeyboardInterrupt:

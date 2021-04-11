@@ -55,14 +55,16 @@ def main():
 
         while True:
             ret, frame = capture.read()
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             assert ret
-            cv2.imshow('Input', frame)
+            cv2.imshow('Input', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
             x = frame.copy()
             x[:, (1280 - 720) // 2 : -(1280 - 720) // 2] = predict(
                 frame, model, datamodule.transform
             )
-            cv2.imshow('Output', x)
+            cv2.imshow('Output', cv2.cvtColor(x, cv2.COLOR_RGB2BGR))
+
 
             cv2.waitKey(1)
     except KeyboardInterrupt:

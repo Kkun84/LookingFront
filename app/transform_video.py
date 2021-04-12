@@ -1,12 +1,12 @@
 """
 Usage:
-    realtime_predict.py <video_path> <model_path> [--image_size=<int>] [-g=<int>] [-v=<bool>]
+    realtime_predict.py <video_path> <model_path> [--image_size=<int>] [-g=<int>] [-v]
 
 Options:
-    -h --help               Show this screen.
-    --image_size=<int>      Image width & height [default: 256].
-    -g, --gpus=<int>        Use GPU.
-    -v, --verbose=<bool>    Display cv2 window [default: True].
+    -h --help           Show this screen.
+    --image_size=<int>  Image width & height [default: 256].
+    -g, --gpus=<int>    Use GPU.
+    -v, --verbose       Display cv2 window.
 """
 
 from pathlib import Path
@@ -67,6 +67,7 @@ def main():
     ]
     try:
         if verbose:
+            print(1)
             cv2.namedWindow('Input', cv2.WINDOW_NORMAL)
             cv2.namedWindow('Output', cv2.WINDOW_NORMAL)
             cv2.namedWindow('Tile', cv2.WINDOW_NORMAL)

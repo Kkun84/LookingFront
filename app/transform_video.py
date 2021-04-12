@@ -1,11 +1,12 @@
 """
 Usage:
-    realtime_predict.py <video_path> <model_path> [--image_size=<int>] [-g=<int>]
+    realtime_predict.py <video_path> <model_path> [--image_size=<int>] [-g=<int>] [-v=<bool>]
 
 Options:
-    -h --help           Show this screen.
-    --image_size=<int>  Image width & height [default: 256].
-    -g, --gpus=<int>    Use GPU.
+    -h --help               Show this screen.
+    --image_size=<int>      Image width & height [default: 256].
+    -g, --gpus=<int>        Use GPU.
+    -v, --verbose=<bool>    Display cv2 window [default: True].
 """
 
 from pathlib import Path
@@ -43,6 +44,7 @@ def main():
     image_size = int(args['--image_size'])
     gpus = args['--gpus'] and [int(i) for i in args['--gpus']]
     device = torch.device('cpu') if gpus is None else torch.device(f'cuda{gpus}')
+    verbose = bool(args['--verbose'])
 
     datamodule = DataModule(image_size=image_size)
     assert model_path.is_file()
@@ -61,6 +63,7 @@ def main():
         ),
     )
     try:
+        if verbose:
         cv2.namedWindow('Input', cv2.WINDOW_NORMAL)
         cv2.namedWindow('Output', cv2.WINDOW_NORMAL)
         cv2.namedWindow('Tile', cv2.WINDOW_NORMAL)
@@ -74,18 +77,21 @@ def main():
 
         for frame in tqdm(frame_list):
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            cv2.imshow('Input', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
 
             x = frame.copy()
             x[:, (1280 - 720) // 2 : -(1280 - 720) // 2] = predict(
                 frame, model, datamodule.transform
             )
 
+            video_writer_list[0].write(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
+            video_writer_list[1].write(cv2.cvtColor(x, cv2.COLOR_RGB2BGR))
+
+            if verbose:
+                cv2.imshow('Input', cv2.cvtColor(frame, cv2.COLOR_RGB2BGR))
             cv2.imshow('Output', cv2.cvtColor(x, cv2.COLOR_RGB2BGR))
-
-            cv2.imshow('Tile', cv2.cvtColor(cv2.vconcat([frame, x]), cv2.COLOR_RGB2BGR))
-
-            video_writer.write(cv2.cvtColor(x, cv2.COLOR_RGB2BGR))
+                cv2.imshow(
+                    'Tile', cv2.cvtColor(cv2.vconcat([frame, x]), cv2.COLOR_RGB2BGR)
+                )
 
             cv2.waitKey(1)
 
@@ -93,7 +99,9 @@ def main():
         pass
     finally:
         capture.release()
-        video_writer.release()
+        video_writer_list[0].release()
+        video_writer_list[1].release()
+        if verbose:
         cv2.destroyAllWindows()
         print('Done.')
     return
